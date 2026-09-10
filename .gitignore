@@ -1,0 +1,17 @@
+# Environment / secrets (never push these)
+.env
+server/.env
+
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Logs
+*.log
+
+# Uploaded product images (business data, back up separately)
+uploads/
+
+# OS junk
+.DS_Store
+Thumbs.db

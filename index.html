@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Utsaho - Handmade treasures from Khulsi, Chattogram. Shop handmade candles, heritage dresses, custom home decor, soap, jewelry and more. Cash on delivery, bKash and Nagad accepted.">
+    <meta property="og:title" content="Utsaho - Handmade Art & Home Decor">
+    <meta property="og:description" content="Handcrafted with love. Unique candles, heritage dresses, and custom home decor from Khulsi, Chattogram.">
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <title>Utsaho - Handmade Art & Home Decor</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">
+                <h1>Utsaho</h1>
+                <span class="tagline">Handmade with Love</span>
+            </div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home" onclick="closeMobileMenu()">Home</a></li>
+                <li><a href="#products" onclick="closeMobileMenu()">Products</a></li>
+                <li><a href="#about" onclick="closeMobileMenu()">About</a></li>
+                <li><a href="#contact" onclick="closeMobileMenu()">Contact</a></li>
+                <li><a href="#wishlist" onclick="closeMobileMenu()">Wishlist</a></li>
+                <li><a href="#custom-order" onclick="closeMobileMenu()">Custom Request</a></li>
+                <li><a href="#orders" onclick="closeMobileMenu()">My Orders</a></li>
+            </ul>
+            <button class="hamburger" id="hamburger" onclick="toggleMobileMenu()" aria-label="Menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+            <div class="nav-right">
+                <a href="admin.html" class="admin-link" title="Admin Panel">Admin</a>
+                <div class="auth-buttons" id="authButtons">
+                    <button class="login-btn" onclick="showAuthModal('login')">Login</button>
+                    <button class="register-btn" onclick="showAuthModal('register')">Register</button>
+                </div>
+                <div class="user-menu" id="userMenu" style="display:none;">
+                    <span class="user-name" id="userName"></span>
+                    <button class="logout-btn" onclick="handleLogout()">Logout</button>
+                </div>
+                <div class="cart-icon" id="cartIcon">
+                    <span>&#128722;</span>
+                    <span class="cart-count" id="cartCount">0</span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-content">
+                <h2>Discover Handcrafted Treasures</h2>
+                <p>Unique candles, heritage dresses, and custom home decor made with passion</p>
+                <button class="cta-btn" onclick="scrollToProducts()">Shop Now</button>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Search products, categories..." oninput="handleSearch(this.value)">
+                    <button onclick="clearSearch()">&times;</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Categories -->
+        <section class="categories">
+            <h3>Our Categories</h3>
+            <div class="category-grid" id="categoryGrid">
+                <div class="category-card" onclick="filterProducts('candle')">
+                    <div class="cat-icon">&#128367;</div>
+                    <h4>Candle</h4>
+                </div>
+                <div class="category-card" onclick="filterProducts('dress')">
+                    <div class="cat-icon">&#128087;</div>
+                    <h4>Heritage Dresses</h4>
+                </div>
+                <div class="category-card" onclick="filterProducts('decor')">
+                    <div class="cat-icon">&#127968;</div>
+                    <h4>Home Decor</h4>
+                </div>
+                <div class="category-card" onclick="filterProducts('soap')">
+                    <div class="cat-icon">&#129514;</div>
+                    <h4>Soap &amp; Cosmetics</h4>
+                </div>
+                <div class="category-card" onclick="filterProducts('jewelry')">
+                    <div class="cat-icon">&#128141;</div>
+                    <h4>Jewelry</h4>
+                </div>
+                <div class="category-card" onclick="filterProducts('bags')">
+                    <div class="cat-icon">&#128092;</div>
+                    <h4>Bags &amp; Accessories</h4>
+                </div>
+                <div class="category-card" onclick="filterProducts('festive')">
+                    <div class="cat-icon">&#127792;</div>
+                    <h4>Festive Items</h4>
+                </div>
+                <div class="category-card" onclick="filterProducts('jute')">
+                    <div class="cat-icon">&#129513;</div>
+                    <h4>Jute Crafts</h4>
+                </div>
+            </div>
+        </section>
+
+        <!-- Products Section -->
+        <section id="products" class="products-section">
+            <div class="section-title-row">
+                <h3>Our Products</h3>
+                <div class="sort-bar">
+                    <label for="sortSelect">Sort:</label>
+                    <select id="sortSelect" onchange="setSort(this.value)">
+                        <option value="newest">Newest</option>
+                        <option value="rating">Top Rated</option>
+                        <option value="sale">On Sale</option>
+                        <option value="price-low">Price: Low to High</option>
+                        <option value="price-high">Price: High to Low</option>
+                        <option value="name">Name A-Z</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filter-buttons">
+                <button class="filter-btn active" onclick="filterProducts('all')">All</button>
+                <button class="filter-btn" onclick="filterProducts('candle')">Candle</button>
+                <button class="filter-btn" onclick="filterProducts('dress')">Heritage Dresses</button>
+                <button class="filter-btn" onclick="filterProducts('decor')">Home Decor</button>
+            </div>
+            <div class="product-grid" id="productGrid">
+                <!-- Products loaded by JS -->
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about-section">
+            <h3>About Us</h3>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Welcome to <strong>Utsaho</strong> - your destination for unique handmade treasures. Every piece we create tells a story of craftsmanship, love, and attention to detail.</p>
+                    <p>From aromatic candles to elegant heritage dresses and customized home decor, we bring artistry to your everyday life.</p>
+                    <ul class="about-features">
+                        <li>&#10004; 100% Handmade Products</li>
+                        <li>&#10004; Custom Orders Welcome</li>
+                        <li>&#10004; Eco-Friendly Materials</li>
+                        <li>&#10004; Worldwide Shipping</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- My Wishlist Section -->
+        <section id="wishlist" class="wishlist-section">
+            <h3>My Wishlist</h3>
+            <div id="wishlistGrid" class="wishlist-grid">
+                <p class="orders-login-hint">Login to save items to your wishlist.</p>
+            </div>
+        </section>
+
+        <!-- My Orders Section -->
+        <section id="orders" class="orders-section">
+            <h3>My Orders</h3>
+            <div id="myOrdersList" class="my-orders">
+                <p class="orders-login-hint">Please login to view your orders.</p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact-section">
+            <h3>Contact Us</h3>
+            <div class="contact-container">
+                <form id="contactForm" onsubmit="handleContact(event)">
+                    <input type="text" name="name" placeholder="Your Name" required>
+                    <input type="email" name="email" placeholder="Your Email" required>
+                    <input type="text" name="subject" placeholder="Subject">
+                    <textarea name="message" placeholder="Your Message" rows="4" required></textarea>
+                    <button type="submit" class="submit-btn">Send Message</button>
+                </form>
+                <div class="custom-order-wrap" id="custom-order">
+                    <h4>Request a Custom Piece</h4>
+                    <p class="form-hint">Want a candle, dress, or home decor in your own colors/design? Tell us and we will craft it for you.</p>
+                    <form id="customOrderForm" onsubmit="handleCustomOrder(event)">
+                        <input type="text" id="coName" placeholder="Your Name" required>
+                        <input type="tel" id="coPhone" placeholder="Phone">
+                        <input type="email" id="coEmail" placeholder="Email">
+                        <select id="coType">
+                            <option value="">Select product category (optional)</option>
+                            <option value="candle">Candle</option>
+                            <option value="dress">Heritage Dress</option>
+                            <option value="decor">Home Decor</option>
+                            <option value="soap">Soap &amp; Cosmetics</option>
+                            <option value="jewelry">Jewelry</option>
+                            <option value="bags">Bags &amp; Accessories</option>
+                            <option value="festive">Festive Items</option>
+                            <option value="jute">Jute Crafts</option>
+                            <option value="other">Something else</option>
+                        </select>
+                        <label class="file-label">Reference image (optional)
+                            <input type="file" id="coImage" accept="image/*">
+                        </label>
+                        <label class="file-label">Reference video (optional)
+                            <input type="file" id="coVideo" accept="video/*">
+                        </label>
+                        <textarea id="coDetails" placeholder="Your notes: colors, size, design, occasion, budget, delivery area..." rows="4" required></textarea>
+                        <button type="submit" class="submit-btn">Send Custom Request</button>
+                    </form>
+                    <div class="my-custom-requests" id="myCustomRequests"></div>
+                </div>
+                <div class="contact-info">
+                    <div class="info-item">
+                        <span class="info-icon">&#128205;</span>
+                        <p>Khulsi, Chattogram, Bangladesh</p>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">&#128222;</span>
+                        <p>+880 1600-164055</p>
+                    </div>
+                    <div class="info-item">
+                        <span class="info-icon">&#128231;</span>
+                        <p>utsaho@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Cart Sidebar -->
+    <div class="cart-sidebar" id="cartSidebar">
+        <div class="cart-header">
+            <h3>Your Cart</h3>
+            <button class="close-cart" onclick="toggleCart()">&times;</button>
+        </div>
+        <div class="cart-items" id="cartItems">
+            <!-- Cart items loaded by JS -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-total">
+                <span>Total:</span>
+                <span id="cartTotal">৳0</span>
+            </div>
+            <button class="checkout-btn" onclick="checkout()">Proceed to Checkout</button>
+        </div>
+    </div>
+    <div class="cart-overlay" id="cartOverlay" onclick="toggleCart()"></div>
+
+    <!-- Auth Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="auth-modal-content">
+            <button class="auth-close" onclick="closeAuthModal()">&times;</button>
+            <h2 id="authTitle">Login</h2>
+            <div id="loginForm" class="auth-form">
+                <form onsubmit="handleLogin(event)">
+                    <input type="email" placeholder="Email" required id="loginEmail">
+                    <input type="password" placeholder="Password" required id="loginPassword">
+                    <button type="submit">Login</button>
+                    <p class="auth-switch">Don't have an account? <a href="#" onclick="showAuthModal('register'); return false;">Register</a></p>
+                    <p class="auth-error" id="loginError"></p>
+                </form>
+            </div>
+            <div id="registerForm" class="auth-form" style="display:none;">
+                <form onsubmit="handleRegister(event)">
+                    <input type="text" placeholder="Full Name" required id="regName">
+                    <input type="email" placeholder="Email" required id="regEmail">
+                    <input type="tel" placeholder="Phone (optional)" id="regPhone">
+                    <input type="text" placeholder="Address (optional)" id="regAddress">
+                    <input type="password" placeholder="Password (min 6 chars)" required id="regPassword">
+                    <button type="submit">Register</button>
+                    <p class="auth-switch">Already have an account? <a href="#" onclick="showAuthModal('login'); return false;">Login</a></p>
+                    <p class="auth-error" id="registerError"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Payment Modal -->
+    <div class="modal" id="paymentModal">
+        <div class="modal-content payment-content">
+            <button class="modal-close" onclick="closePaymentModal()">&times;</button>
+            <h2>Choose Payment Method</h2>
+            <div class="delivery-section">
+                <label class="form-label" for="deliveryArea">Delivery Area</label>
+                <select id="deliveryArea" onchange="recalcPayment()">
+                    <option value="khulsi">Khulsi — ৳30</option>
+                    <option value="chattogram_city">Chattogram City — ৳50</option>
+                    <option value="outside_city">Outside City — ৳100</option>
+                    <option value="pickup">Pickup from Shop (Khulsi) — FREE</option>
+                </select>
+                <p class="form-hint">Free delivery on orders over ৳2,000.</p>
+                <div class="coupon-row">
+                    <input type="text" id="couponInput" placeholder="Coupon code (e.g. UTSAHO10)">
+                    <button type="button" class="coupon-btn" onclick="applyCoupon()">Apply</button>
+                </div>
+                <p class="coupon-msg" id="couponMsg"></p>
+            </div>
+            <div class="payment-breakdown">
+                <div class="b-line"><span>Subtotal</span><span id="bSubtotal">৳0</span></div>
+                <div class="b-line"><span>Discount</span><span id="bDiscount">-৳0</span></div>
+                <div class="b-line"><span>Delivery</span><span id="bDelivery">৳0</span></div>
+                <div class="b-line b-total"><span>Total</span><span id="paymentTotal">৳0</span></div>
+            </div>
+            <div class="payment-options">
+                <label class="payment-option selected" id="payCod">
+                    <input type="radio" name="payment" value="cod" checked onchange="selectPayment(this)">
+                    <div>
+                        <span class="pay-name">Cash on Delivery</span>
+                        <span class="pay-desc">Pay in cash when you receive your order</span>
+                    </div>
+                </label>
+                <label class="payment-option" id="payBkash">
+                    <input type="radio" name="payment" value="bkash" onchange="selectPayment(this)">
+                    <div>
+                        <span class="pay-name">bKash</span>
+                        <span class="pay-desc"><p>Send money to 01600-164055</p></span>
+                    </div>
+                </label>
+                <label class="payment-option" id="payNagad">
+                    <input type="radio" name="payment" value="nagad" onchange="selectPayment(this)">
+                    <div>
+                        <span class="pay-name">Nagad</span>
+                        <span class="pay-desc"><p>Send money to 01600-164055</p></span>
+                    </div>
+                </label>
+            </div>
+            <div class="payment-note" id="paymentNote"></div>
+            <button class="add-to-cart-btn" onclick="confirmPayment()">Confirm & Place Order</button>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">&times;</button>
+            <div class="modal-body">
+                <div class="modal-image" id="modalImage"></div>
+                <div class="modal-details">
+                    <h2 id="modalTitle"></h2>
+                    <p class="modal-category" id="modalCategory"></p>
+                    <p class="modal-price" id="modalPrice"></p>
+                    <p class="modal-stock" id="modalStock"></p>
+                    <div id="notifyStockArea"></div>
+                    <p class="modal-desc" id="modalDesc"></p>
+                    <div class="modal-wishlist" id="modalWishlistBtn"></div>
+                    <div class="quantity-control">
+                        <button onclick="changeModalQty(-1)">-</button>
+                        <span id="modalQty">1</span>
+                        <button onclick="changeModalQty(1)">+</button>
+                    </div>
+                    <button class="add-to-cart-btn" onclick="addToCartFromModal()">Add to Cart</button>
+                </div>
+            </div>
+            <div class="modal-gallery" id="modalGallery"></div>
+            <div class="modal-reviews" id="modalReviews">
+                <h3>Customer Reviews</h3>
+                <div class="review-summary" id="reviewSummary"></div>
+                <div id="reviewList"></div>
+                <div id="reviewFormArea"></div>
+            </div>
+            <div class="related-products">
+                <h3>You May Also Like</h3>
+                <div class="related-grid" id="relatedGrid"></div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Utsaho</h4>
+                <p>Handcrafted with love. Every product is unique and made with care.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#products">Products</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                    <li><a href="admin.html">Admin Panel</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Follow Us</h4>
+                <div class="social-links">
+                    <a href="#">Facebook</a>
+                    <a href="#">Instagram</a>
+                    <a href="#">WhatsApp</a>
+                </div>
+            </div>
+            <div class="footer-section">
+                <h4>Our Location</h4>
+                <p>Khulsi, Chattogram,<br>Bangladesh</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Utsaho. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <div class="whatsapp-float">
+        <a href="https://wa.me/8801600164055" target="_blank" rel="noopener" title="Chat with us on WhatsApp">
+            <svg viewBox="0 0 24 24" width="30" height="30"><path fill="currentColor" d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.52.149-.174.198-.298.297-.497.1-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+            <span>Chat with us</span>
+        </a>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

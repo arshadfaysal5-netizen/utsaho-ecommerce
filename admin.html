@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Utsaho Admin Dashboard - manage products, orders, coupons and messages for the Utsaho handmade shop.">
+    <title>Admin Dashboard - Utsaho</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-nav">
+        <h1>Utsaho <span>Admin</span></h1>
+        <div class="admin-nav-links">
+            <button class="nav-tab active" data-tab="products">Products</button>
+            <button class="nav-tab" data-tab="orders">Orders</button>
+            <button class="nav-tab" data-tab="coupons">Coupons</button>
+            <button class="nav-tab" data-tab="messages">
+                Messages <span class="notif-badge" id="messageNotif" style="display:none;">0</span>
+            </button>
+            <button class="nav-tab" data-tab="users">Users</button>
+            <a href="index.html" class="back-link">View Store</a>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </div>
+
+    <div class="admin-container">
+        <!-- Login screen -->
+        <div class="admin-login" id="adminLogin">
+            <div class="login-box">
+                <h2>Admin Login</h2>
+                <form id="adminLoginForm">
+                    <input type="email" placeholder="Email" required id="adminEmail">
+                    <input type="password" placeholder="Password" required id="adminPassword">
+                    <button type="submit">Login</button>
+                    <p class="error" id="adminLoginError"></p>
+                </form>
+                <div class="login-hint" id="loginHint">
+                    <strong>Default login:</strong> admin@utsaho.com / admin123
+                    <span class="hint-note">Development only — hidden on the live site. Change the password in production.</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard -->
+        <div class="dashboard" id="dashboard" style="display:none;">
+            <div class="admin-header">
+                <h2>Dashboard</h2>
+                <div class="stats" id="stats"></div>
+            </div>
+
+            <!-- Products tab -->
+            <div class="tab-content active" id="tab-products">
+                <div class="tab-header">
+                    <h3>Products</h3>
+                    <button class="btn-add" onclick="openProductModal()">+ Add Product</button>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Image</th>
+                            <th>Name</th>
+                            <th>Category</th>
+                            <th>Price (BDT)</th>
+                            <th>Stock</th>
+                            <th>Badge</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productsTableBody"></tbody>
+                </table>
+            </div>
+
+            <!-- Orders tab -->
+            <div class="tab-content" id="tab-orders">
+                <div class="tab-header">
+                    <h3>Orders</h3>
+                </div>
+                <div id="ordersList"></div>
+            </div>
+
+            <!-- Coupons tab -->
+            <div class="tab-content" id="tab-coupons">
+                <div class="tab-header">
+                    <h3>Coupon Codes</h3>
+                    <button class="btn-add" onclick="openCouponModal()">+ New Coupon</button>
+                </div>
+                <p class="form-hint">Create discount codes (e.g. UTSAHO10 = 10% off) that customers enter at checkout.</p>
+                <div id="couponsList"></div>
+            </div>
+
+            <!-- Messages tab -->
+            <div class="tab-content" id="tab-messages">
+                <div class="tab-header">
+                    <h3>Contact Messages</h3>
+                </div>
+                <div id="messagesList"></div>
+                <div class="tab-header" style="margin-top:2rem;">
+                    <h3>Back-in-Stock Requests</h3>
+                </div>
+                <div id="stockAlertsList"></div>
+                <div class="tab-header" style="margin-top:2rem;">
+                    <h3>Custom Order Requests</h3>
+                </div>
+                <div id="customOrdersList"></div>
+            </div>
+
+            <!-- Users tab -->
+            <div class="tab-content" id="tab-users">
+                <div class="tab-header">
+                    <h3>Registered Users</h3>
+                </div>
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Role</th>
+                            <th>Registered</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content product-form">
+            <h3 id="productModalTitle">Add Product</h3>
+            <form id="productForm" enctype="multipart/form-data">
+                <input type="hidden" id="productId">
+                <label class="form-label">Product Images (first image = main)</label>
+                <div class="gallery-previews" id="galleryPreviews"></div>
+                <input type="file" id="productImage" accept="image/*" multiple>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="productFeatured"> <span>Mark as Featured (shows on homepage banner area)</span>
+                </label>
+                <div id="removeImagesWrap" style="display:none;">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="removeImages"> <span>Remove all current images</span>
+                    </label>
+                </div>
+                <input type="text" id="productName" placeholder="Product Name" required>
+                <select id="productCategory" required>
+                    <option value="">Select Category</option>
+                    <option value="candle">Candle</option>
+                    <option value="dress">Heritage Dresses</option>
+                    <option value="decor">Home Decor</option>
+                    <option value="soap">Soap &amp; Cosmetics</option>
+                    <option value="jewelry">Jewelry</option>
+                    <option value="bags">Bags &amp; Accessories</option>
+                    <option value="festive">Festive Items</option>
+                    <option value="jute">Jute Crafts</option>
+                </select>
+                <div class="price-stock-row">
+                    <input type="number" id="productPrice" placeholder="Price (BDT)" min="0" required>
+                    <input type="number" id="productOriginalPrice" placeholder="Original Price (SALE)">
+                    <input type="number" id="productStock" placeholder="Stock" min="0" required>
+                </div>
+                <p class="form-hint">Set <strong>Original Price</strong> higher than Price to show a <strong>SALE</strong> badge with the discount on the store.</p>
+                <textarea id="productDesc" placeholder="Description" rows="4" required></textarea>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="closeProductModal()">Cancel</button>
+                    <button type="submit" class="btn-save">Save</button>
+                </div>
+                <p class="error" id="productFormError"></p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Coupon Modal -->
+    <div class="modal" id="couponModal">
+        <div class="modal-content product-form">
+            <h3>New Coupon</h3>
+            <form id="couponForm">
+                <input type="text" id="couponCode" placeholder="Code, e.g. UTSAHO10" required>
+                <input type="number" id="couponPercent" placeholder="Discount % (1-100)" min="1" max="100" required>
+                <div class="form-actions">
+                    <button type="button" class="btn-cancel" onclick="document.getElementById('couponModal').classList.remove('show')">Cancel</button>
+                    <button type="submit" class="btn-save">Save Coupon</button>
+                </div>
+                <p class="error" id="couponFormError"></p>
+            </form>
+        </div>
+    </div>
+
+    <script src="admin.js"></script>
+    <script>
+        var hint = document.getElementById('loginHint');
+        if (hint) hint.style.display = 'none';
+    </script>
+</body>
+</html>
